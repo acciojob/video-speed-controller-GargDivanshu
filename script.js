@@ -1,9 +1,19 @@
-const inputs = document.querySelectorAll('.controls input');
+//your code here
 
-    function handleUpdate() {
-      const suffix = this.dataset.sizing || '';
-      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+function reset() {
+    for (i = 1; i <= 9; i++) {
+        const block = document.getElementById(`${i}`);
+        block.style.backgroundColor = "transparent";
     }
+}
+  
+document.getElementById('reset_button').addEventListener('click', reset);
 
-    inputs.forEach(input => input.addEventListener('change', handleUpdate));
-    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+document.getElementById('change_button').addEventListener('click', () => {
+    reset();
+    const blockId = document.getElementById("block_id").value;
+    const color = document.getElementById("colour_id").value;
+    // alert(colorId)
+    const block = document.getElementById(`${blockId}`);
+    block.style.backgroundColor = color;
+});
