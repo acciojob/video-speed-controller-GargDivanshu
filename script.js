@@ -1,19 +1,48 @@
-//your code here
+const video = document.querySelector('.viewer');
+const toggle = document.querySelector('.toggle');
+const progress = document.querySelector('.progress__filled');
+const volumeInput = document.querySelector('input[name="volume"]');
+const playbackSpeedInput = document.querySelector('input[name="playbackSpeed"]');
+const rewindButton = document.querySelector('.rewind');
+const forwardButton = document.querySelector('.forward');
 
-function reset() {
-    for (i = 1; i <= 9; i++) {
-        const block = document.getElementById(`${i}`);
-        block.style.backgroundColor = "transparent";
-    }
+function togglePlayPause() {
+  if (video.paused || video.ended) {
+    video.play();
+    toggle.textContent = '❚ ❚';
+  } else {
+    video.pause();
+    toggle.textContent = '►';
+  }
 }
-  
-document.getElementById('reset_button').addEventListener('click', reset);
 
-document.getElementById('change_button').addEventListener('click', () => {
-    reset();
-    const blockId = document.getElementById("block_id").value;
-    const color = document.getElementById("colour_id").value;
-    // alert(colorId)
-    const block = document.getElementById(`${blockId}`);
-    block.style.backgroundColor = color;
+function updateProgress() {
+  const progressFilled = (video.currentTime / video.duration) * 100;
+  progress.style.width = `${progressFilled}%`;
+
+  if (video.ended) {
+    toggle.textContent = '►';
+  }
+}
+
+function setVolume() {
+  video.volume = volumeInput.value;
+}
+
+function setPlaybackSpeed() {
+  video.playbackRate = playbackSpeedInput.value;
+}
+
+function skipVideo(event) {
+  const skipDuration = Number(event.target.dataset.skip);
+  video.currentTime += skipDuration;
+}
+
+video.addEventListener('loadedmetadata', () => {
+  video.addEventListener('timeupdate', updateProgress);
+  volumeInput.addEventListener('input', setVolume);
+  playbackSpeedInput.addEventListener('input', setPlaybackSpeed);
+  toggle.addEventListener('click', togglePlayPause);
+  rewindButton.addEventListener('click', skipVideo);
+  forwardButton.addEventListener('click', skipVideo);
 });
